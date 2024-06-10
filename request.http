@@ -1,0 +1,7 @@
+POST http://localhost:3000/usuario HTTP/1.1
+Content-Type: application/json
+
+{
+    "nombre":"Pedro",
+    "balance":10000
+} 
