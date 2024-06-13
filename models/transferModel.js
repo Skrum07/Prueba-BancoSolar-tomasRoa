@@ -2,26 +2,26 @@ import { pool } from "../config/db.js";
 
 export const addTransferQuery = async (emisor, receptor, monto) => {
    const { id: emisorId } = (
-      await pool.query("SELECT * FROM usuarios WHERE nombre = '${emisor}'")
+      await pool.query(`SELECT * FROM usuarios WHERE nombre = '${emisor}'`)
    ).rows[0];
 
    const { id: receptorId } = (
-      await pool.query("SELECT * FROM usuarios WHERE nombre = '${receptor}'")
+      await pool.query(`SELECT * FROM usuarios WHERE nombre = '${receptor}'`)
    ).rows[0];
 
    const recordTransferQuery = {
-       text: "INSERT INTO transferencias (emisor_id, receptor_id, monto, fecha) VALUES ($1, $2, $3, NOW())",
+       text: "INSERT INTO transferencias (emisor, receptor, monto, fecha) VALUES ($1, $2, $3, NOW())",
        values: [emisorId, receptorId, monto],
    };
    
    const refreshBalanceEmisorQuery = {
        text: "UPDATE usuarios SET balance = balance - $1 WHERE id = $2",
-       values: [monto, emisorId],
+       values: [monto, emisor],
    };
 
    const refreshBalanceReceptorQuery = {
        text: "UPDATE usuarios SET balance = balance + $1 WHERE id = $2",
-       values: [monto, receptorId],
+       values: [monto, receptor],
    };
 
    try {
@@ -33,25 +33,39 @@ export const addTransferQuery = async (emisor, receptor, monto) => {
        return true;
 
    } catch (error) {
-       console.log("ERROR CODE: ", error.code, "MESSAGE: ", error.message);
+       console.log(error);
        await pool.query("ROLLBACK");
        throw error;
    };
 
-   const getTransferQuery = async () => {
+   export const getTransferQuery = async () => {
        try {
            const sql = {
-               text: "SELECT * FROM transferencias",
-           }
-           const response = await pool.query(sql);
-           if (response.rowCount > 0) {
-               return response.rows
+            //    text: 'SELECT
+            //         t.id,
+            //         e.nombre AS emisor,
+            //         r.nombre AS receptor,
+            //         t.monto,
+            //         t.fecha
+
+            //         FROM transferencias t
+            //         JOIN usuarios e ON t.emisor_id = e.id
+            //         JOIN usuarios r ON t.receptor_id = r.id',
+
+                        text: 'SELECT * FROM transferencias',
+                    rowMode: "array",
+           };
+           const result = await pool.query(sql);
+           if (result.rowCount > 0) {
+               return result.rows;
            } else {
-               return new Error("No se encontraron transferencias")
+               return null
            }
+
        } catch (error) {
            console.log("ERROR CODE: ", error.code, "MESSAGE: ", error.message);
        }
    }
 
 }
+
