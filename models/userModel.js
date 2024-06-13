@@ -33,3 +33,22 @@ export const getUserQueries = async() => {
         console.log("ERROR CODE: ", error.code, "MESSAGE: ", error.message);
     }
 }
+
+export const editUserQueries = async (datos) => {
+    try {
+        // const [name, balance, id] = datos;
+        const query = {
+            text: 'UPDATE usuarios SET nombre = $1, balance = $2 WHERE id = $3',
+            values: datos,
+        } 
+        const response = await pool.query(query); 
+        if (response.rowCount > 0) {
+            return response.rows[0]
+        } else {
+            return new Error("No se actualizo el usuario")
+        }
+    } catch (error) {
+        console.log("ERROR CODE: ", error.code, "MESSAGE: ", error.message);
+    } 
+}
+
