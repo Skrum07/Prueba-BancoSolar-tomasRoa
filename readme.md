@@ -1,17 +1,20 @@
 
 # Titulo del proyecto
 
-
+Banco Solar
 
 ## Descripción del proyecto
 
-En este proyecto buscamos validar nuestros conocimientos de Instalación y configuración de la
-librería pg, Propiedades del objeto result y la asincronía en una consulta, Ingresando y
-consultando datos, como también Actualizando y eliminando datos.
+Se busco desarrollar un sistema de transferencias, realizado  con un servidor con Node, se utiliza
+PostgreSQL para la gestión y persistencia de datos, y se simula un sistema de
+transferencias.
+El sistema permite registrar nuevos usuarios con un balance inicial y
+realizar transferencias de saldos entre ellos.
+
 
 ## Capturas de Pantalla del Proyecto
 
-![Home](./assets/img/Captura%20de%20pantalla%202024-06-06%20a%20la(s)%2012.40.26 p. m..png)
+![Home](./assets/img/Captura%20de%20pantalla%202024-06-13%20a%20la(s)%206.33.09 p. m..png)
 
 Vista de una de las consultas solicitadas
 
