@@ -16,12 +16,12 @@ export const addTransferQuery = async (emisor, receptor, monto) => {
    
    const refreshBalanceEmisorQuery = {
        text: "UPDATE usuarios SET balance = balance - $1 WHERE id = $2",
-       values: [monto, emisor],
+       values: [monto, emisorId],
    };
 
    const refreshBalanceReceptorQuery = {
        text: "UPDATE usuarios SET balance = balance + $1 WHERE id = $2",
-       values: [monto, receptor],
+       values: [monto, receptorId],
    };
 
    try {
@@ -36,21 +36,22 @@ export const addTransferQuery = async (emisor, receptor, monto) => {
        console.log(error);
        await pool.query("ROLLBACK");
        throw error;
-   };
+   }
+};
 
    export const getTransferQuery = async () => {
        try {
            const sql = {
-            //    text: 'SELECT
-            //         t.id,
-            //         e.nombre AS emisor,
-            //         r.nombre AS receptor,
-            //         t.monto,
-            //         t.fecha
+               text: `SELECT
+                    t.id,
+                    e.nombre AS emisor,
+                    r.nombre AS receptor,
+                    t.monto,
+                    t.fecha 
 
-            //         FROM transferencias t
-            //         JOIN usuarios e ON t.emisor_id = e.id
-            //         JOIN usuarios r ON t.receptor_id = r.id',
+                    FROM transferencias t
+                    JOIN usuarios e ON t.emisor = e.id
+                    JOIN usuarios r ON t.receptor = r.id`,
 
                         text: 'SELECT * FROM transferencias',
                     rowMode: "array",
@@ -67,5 +68,5 @@ export const addTransferQuery = async (emisor, receptor, monto) => {
        }
    }
 
-}
+
 
