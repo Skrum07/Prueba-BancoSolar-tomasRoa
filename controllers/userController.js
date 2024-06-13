@@ -1,5 +1,5 @@
 import { log } from "console";
-import { addUserQueries, getUserQueries, editUserQueries } from "../models/userModel.js";
+import { addUserQueries, getUserQueries, editUserQueries, deleteUserQueries } from "../models/userModel.js";
 import path from "path";
 const __dirname = path.resolve();
 
@@ -38,5 +38,15 @@ export const editUser = async (req, res) => {
         res.status(201).send(user);
     } catch (error) {
         res.status(500).send("Algo salio mal al actualizar el usuario");
+    }
+}
+
+export const deleteUser = async (req, res) => {
+    const { id } = req.query;
+    try {
+        const user = await deleteUserQueries(id);
+        res.status(201).send(user);
+    } catch (error) {
+        res.status(500).send("Algo salio mal al eliminar el usuario");
     }
 }

@@ -52,3 +52,19 @@ export const editUserQueries = async (datos) => {
     } 
 }
 
+export const deleteUserQueries = async (id) => {
+    try {
+        const query = {
+            text: 'DELETE FROM usuarios WHERE id = $1 RETURNING *',
+            values: [id],
+        } 
+        const response = await pool.query(query); 
+        if (response.rowCount > 0) {
+            return response.rows[0]
+        } else {
+            return new Error("No se elimino el usuario")
+        }
+    } catch (error) {
+        console.log("ERROR CODE: ", error.code, "MESSAGE: ", error.message);
+    } 
+}
